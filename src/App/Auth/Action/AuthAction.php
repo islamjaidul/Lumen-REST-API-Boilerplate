@@ -45,10 +45,10 @@ class AuthAction extends Action
     {   
         try {
             $this->validate($this->request, [
-                'first_name' => 'required',
-                'last_name'  => 'required',
-                'email'      => 'required|unique:users,email',
-                'password'   => 'required'
+                'first_name' => 'required|max:100',
+                'last_name'  => 'required|max:100',
+                'email'      => 'required|max:100|unique:users,email',
+                'password'   => 'required|min:6'
             ]);
             
             $serviceResponse = $this->service
@@ -58,8 +58,7 @@ class AuthAction extends Action
             ->respond($serviceResponse);
         } catch(ValidationException $exception) {
             return response()->json([
-                'status' => 'error',
-                'msg'    => 'Error',
+                'status' => false,
                 'errors' => $exception->errors(),
             ], 422);
         }
